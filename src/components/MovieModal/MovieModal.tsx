@@ -8,11 +8,18 @@ interface MovieModalProps {
     onClose: () => void;
 }
 
-const modalRoot = document.createElement('div');
-modalRoot.id = 'modal-root';
-document.body.appendChild(modalRoot);
+let modalRoot: HTMLElement | null = null;
 
 export default function MovieModal({ movie, onClose }: MovieModalProps) {
+    if (!modalRoot) {
+        modalRoot = document.getElementById('modal-root');
+        if (!modalRoot) {
+            modalRoot = document.createElement('div');
+            modalRoot.id = 'modal-root';
+            document.body.appendChild(modalRoot);
+        }
+    }
+
     const handleBackdropClick = useCallback((e: React.MouseEvent) => {
         if (e.target === e.currentTarget) {
             onClose();
@@ -63,6 +70,6 @@ export default function MovieModal({ movie, onClose }: MovieModalProps) {
                 </div>
             </div>
         </div>,
-        modalRoot
+        modalRoot as HTMLElement
     );
 }
